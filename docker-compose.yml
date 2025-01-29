@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - supabase
+    network_mode: host
+
+  supabase:
+    image: supabase/postgres
+    ports:
+      - "54321:54321"
+      - "54322:54322"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - supabase_data:/var/lib/postgresql/data
+
+volumes:
+  supabase_data:
