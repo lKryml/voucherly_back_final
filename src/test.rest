@@ -1,0 +1,134 @@
+### Send OTP
+GET http://localhost:3030/otp/218945877949
+Content-Type: application/json
+
+
+###
+POST http://localhost:3030/api/auth/login
+Content-Type: application/json
+
+{
+  "P_phoneNumber": "218927345059",
+  "p_password": "mostafa"
+}
+
+### Verify the session token
+POST http://localhost:3030/api/auth/verifyToken
+Content-Type: application/json
+
+{
+  "session_token": "4c4ebe49a31648629d48dfdfefb40d000c4a272c6ceb7bf79561f83d58aac9f9"
+}
+### Verify Session Token (Authenticated)
+GET http://localhost:3030/api/verify-session
+Content-Type: application/json
+
+### Example with a real phone number
+# Replace {{phone_number}} with a valid phone number (e.g., 1234567890)
+# GET http://localhost:3000/otp/1234567890
+# Content-Type: application/json
+
+### Validate OTP
+POST http://localhost:3030/otp/218945877949
+Content-Type: application/json
+
+{
+  "code": "309597"
+}
+
+### Example with a real phone number and code
+# Replace {{phone_number}} with the number used in the previous step
+# # Replace {{otp_code}} with the OTP code received
+# POST http://localhost:3030/otp/218945877949
+# Content-Type: application/json
+
+# {
+#   "code": "139539"
+# }
+
+
+
+
+### Get All Distributors
+GET http://localhost:3030/api/distributor
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+
+### Get All Distributors order by name
+GET http://localhost:3030/api/distributorByName
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+
+
+### Create a New Distributor
+POST http://localhost:3030/api/distributor
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+{
+  "name": "aqli12",
+  "fee": 20,
+  "phone": "1234567890",
+  "currency": "USD",
+  "is_percentage": true
+}
+### Update a Distributor
+PUT http://localhost:3030/api/distributor/1
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+{
+  "name": "Updated Distributor Name",
+  "fee": 25,
+  "phone": "9876543210",
+  "currency": "EUR",
+  "is_percentage": false
+}
+
+
+
+### Get All Templates
+GET http://localhost:3030/api/template
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+
+### Get All Templates
+GET http://localhost:3030/api/allTemplateByName
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+### Create a New Template
+POST http://localhost:3030/api/template
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+{
+  "name": "New1 Template",
+  "content": "This is the content of the new template"
+}
+
+
+### Create a New Template
+POST http://localhost:3030/api/template
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+{
+  "name": "New Template",
+  "length": 10,
+  "value": 100,
+  "include_letters": true,
+  "include_numbers": false,
+  "distributor_id": 2
+}
+
+
+###get all voucher
+GET http://localhost:3030/api/getAllVoucher
+Authorization: Bearer <your-access-token>
+Content-Type: application/json
+
+
