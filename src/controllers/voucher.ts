@@ -14,9 +14,10 @@ import {
   updateVoucherData,
 } from "../db/index.js";
 import express from "express";
-import { get } from "lodash";
-import { Bulk, Voucher } from "../typs.js";
 
+import { Bulk, Voucher } from "../typs.js";
+import lodash from 'lodash';
+const { get } = lodash;
 // export const createVouchers = async (
 //   req: express.Request,
 //   res: express.Response

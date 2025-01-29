@@ -6,7 +6,8 @@ import {
   getAllTemplateByName,
 } from "./../db/index.js";
 import express from "express";
-import { get, isFunction } from "lodash";
+import lodash from 'lodash';
+const { get } = lodash;
 
 export const createTemplate = async (
   req: express.Request,

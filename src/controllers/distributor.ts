@@ -7,7 +7,8 @@ import {
 import { addDistributor } from "../db/index.js";
 import express from "express";
 import { Distributor } from "../typs.js";
-import { get, isFunction } from "lodash";
+import lodash from 'lodash';
+const { get } = lodash;
 
 export const createDistributor = async (
   req: express.Request,

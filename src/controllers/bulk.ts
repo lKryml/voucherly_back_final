@@ -1,10 +1,12 @@
-import { get } from "lodash";
+
 import { addBulk, getAllBulk, getVocuherByBulk, removeBulk } from "../db/index.js";
 import express from "express";
 import { Bulk } from "../typs.js";
 
 
 import supabase from "../config/supabaseClient.js";
+import lodash from 'lodash';
+const { get } = lodash;
 
 // Define types for Batch and Voucher
 interface Voucher {

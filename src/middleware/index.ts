@@ -1,7 +1,9 @@
 import { findByKey, getUserBySessionToken } from "../db/index.js";
 import express from "express";
 
-import { get, merge } from "lodash";
+import lodash from 'lodash';
+const { merge } = lodash;
+
 export const isAuthenticated = async (
   req: express.Request,
   res: express.Response,
