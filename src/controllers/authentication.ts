@@ -143,11 +143,11 @@ export const login = async (req: express.Request, res: express.Response) => {
       });
       return;
     }
-    otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
-    if (!otpUsers[P_phoneNumber]) {
-      res.status(400).json({ message: "OTP not found" });
-      return;
-    }
+    // Ensure otpUsers has an index signature allowing string values
+const otpUsers: { [key: string]: string } = {};
+
+// Your existing assignment line with TypeScript compatibility
+otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
     const salt = random();
     const session_token = authentication(salt, user.id) as string;
     res.cookie("VOUCHER-AUTH", session_token, {
