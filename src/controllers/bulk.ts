@@ -1,7 +1,6 @@
-
 import { addBulk, getAllBulk, getVocuherByBulk, removeBulk } from "../db/index.js";
-import express from "express";
-import { Bulk } from "../typs.js";
+import express,{ RequestHandler } from "express";
+import { Bulk } from "typs.js";
 
 
 import supabase from "../config/supabaseClient.js";
@@ -166,6 +165,46 @@ if (typeof currentUserId !== 'number') {
   }
 };
 
+// Corrected controller function
+export const getBatches = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+): Promise<void> => {
+  try {
+    const { data: batches, error } = await supabase
+      .from('batches')
+      .select('*')
+      .eq('is_deleted', false)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return next(error);
+    }
+
+    // Ensure we always return an array
+    const batchArray = Array.isArray(batches) ? batches : [];
+
+    res.status(200).json({
+      message: "Batches fetched successfully",
+      batches: batchArray.map(batch => ({
+        id: batch.id,
+        serial_number: batch.serial_number,
+        status: batch.status,
+        total_value: batch.total_value,
+        voucher_count: batch.voucher_count,
+        currency: batch.currency,
+        distributor_id: batch.distributor_id,
+        template_id: batch.template_id,
+        expiry_date: batch.expiry_date,
+        created_at: batch.created_at
+      }))
+    });
+    
+  } catch (error) {
+    next(error);
+  }
+};
 export const deleteBulk = async (
   req: express.Request,
   res: express.Response
@@ -176,5 +215,80 @@ export const deleteBulk = async (
     res.status(200).json({ message: "bulk  deleted successfully" });
   } catch (error : any ) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// controllers/bulk.ts
+
+
+export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status, value, currency, expiryDate, reason } = req.body;
+
+    // Validate input - don't return the response, just send it
+    if (!status || !value || !currency || !expiryDate || !reason) {
+      res.status(400).json({ message: "All fields are required" });
+      return;
+    }
+
+    // Get existing batch
+    const { data: batch, error: batchError } = await supabase
+      .from('batches')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (batchError || !batch) {
+      res.status(404).json({ message: "Batch not found" });
+      return;
+    }
+
+    // Update batch
+    const { error: updateBatchError } = await supabase
+      .from('batches')
+      .update({
+        status,
+        total_value: value * batch.voucher_count,
+        currency,
+        expiry_date: expiryDate,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id);
+
+    if (updateBatchError) {
+      throw updateBatchError;
+    }
+
+    // Update vouchers
+    const { error: voucherError } = await supabase
+      .from('vouchers')
+      .update({
+        status,
+        value,
+        currency,
+        expiry_date: expiryDate
+      })
+      .eq('batch_id', id);
+
+    if (voucherError) {
+      throw voucherError;
+    }
+
+    // Return updated batch
+    const { data: updatedBatch } = await supabase
+      .from('batches')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    // Send response without returning it
+    res.status(200).json({
+      message: "Batch and vouchers updated successfully",
+      batch: updatedBatch
+    });
+
+  } catch (error) {
+    next(error); // Pass error to Express error handler
   }
 };

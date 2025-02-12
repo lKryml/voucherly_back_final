@@ -129,11 +129,9 @@ export const getAllBulk = async (id: number): Promise<Bulk[]> => {
 
   if (error) {
     console.log("error in create Bulk", error);
-    return [];
-  } 
+  } else {
     return data;
-  
-
+  }
 };
 
 export const updateBulk = async (id: number, Bulk: Record<string, any>) => {
@@ -248,9 +246,9 @@ export const updateDistributorData = async (
   distributor: Record<string, any>
 ) => {
   const { data, error } = await supabase
-    .from("distributor")
+    .from("distributors")
     .update(distributor)
-    .eq("dist_id", id);
+    .eq("id", id);
   if (error) {
     console.log("error in update distributor", error);
   } else {
@@ -423,9 +421,9 @@ export const getAllTemplateByName = async (
 };
 export const removeTemplate = async (id: number) => {
   const { data, error } = await supabase
-    .from("template")
+    .from("templates")
     .update({ is_deleted: true })
-    .eq("template_id", id);
+    .eq("id", id);
   if (error) {
     console.log("error in remove template", error);
   } else {
@@ -438,9 +436,9 @@ export const updateTemplateData = async (
   template: Record<string, any>
 ) => {
   const { data, error } = await supabase
-    .from("template")
+    .from("templates")
     .update(template)
-    .eq("temlate_id", id);
+    .eq("id", id);
   if (error) {
     console.log("error in update template", error);
   } else {

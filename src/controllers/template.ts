@@ -91,32 +91,31 @@ export const updateTemplate = async (
 ) => {
   try {
     const { id } = req.params;
-    const { length, value, isLetter, isNumber, distributor, name_ar } =
+    const { name, length, value, includeNumbers, includeLetters, distributorId } =
       req.body;
-
     if (
+      !name &&
       !length &&
       !value &&
-      !isLetter &&
-      !isNumber &&
-      !distributor &&
-      !name_ar
+      !includeNumbers &&
+      !includeLetters &&
+      !distributorId
     ) {
       res.status(400).json({ message: "Template data is required" });
       return;
     }
     const updateData: { [key: string]: any } = {
-      name_ar,
+      name,
       length,
       value,
-      isLetter,
-      isNumber,
-      distributor,
+      include_numbers:includeNumbers,
+      include_letters:includeLetters,
+      distributor_id:distributorId,
     };
+    console.log("kewi",updateData)
     Object.keys(updateData).forEach((key) => {
       if (updateData[key] === undefined) delete updateData[key];
     });
-    console.log(updateData);
 
     await updateTemplateData(Number(id), updateData);
     res.status(200).json({ message: "Template  updated successfully" });

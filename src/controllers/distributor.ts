@@ -19,11 +19,11 @@ export const createDistributor = async (
     const { name, fee, is_percentage, phone } = req.body;
 
     // Validate required fields
-    if (!name || !fee) {
+    if (!name || typeof fee === 'undefined' || fee === null) {
       res.status(403).json({ message: "Name and fee are required" });
       return; // Do not return the response object
     }
-    
+
     
     const currentUserId = get(req, "identity.id");
     if (typeof currentUserId !== 'number') {
@@ -105,13 +105,13 @@ export const updateDistributor = async (
 ) => {
   try {
     const { id } = req.params;
-    const { name_ar, fee, isfixed } = req.body;
+    const { name, fee, phone,currency,isPercentage } = req.body;
 
-    if (!name_ar && !fee && !isfixed) {
+    if (!name && !fee && !currency &&!isPercentage) {
       res.status(400).json({ message: "Distributor data is required" });
       return;
     }
-    const updateData: { [key: string]: any } = { name_ar, fee, isfixed };
+    const updateData: { [key: string]: any } = { name, fee, phone,currency,is_percentage:isPercentage };
     Object.keys(updateData).forEach((key) => {
       if (updateData[key] === undefined) delete updateData[key];
     });

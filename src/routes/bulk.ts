@@ -4,6 +4,8 @@ import {
   deleteBulk,
   fetchAllBulk,
   insertBatchAndVouchers,
+  getBatches,
+  updateBatchAndVouchers,
 } from "../controllers/bulk.js";
 
 import express from "express";
@@ -13,4 +15,7 @@ export default (router: express.Router) => {
   router.get("/bulk", isAuthenticated, fetchAllBulk);
   router.delete("/bulk/:id", deleteBulk);
   router.post("/generate", insertBatchAndVouchers);
+  router.get('/batches', getBatches);
+  router.put('/batches/:id', updateBatchAndVouchers);
+
 };

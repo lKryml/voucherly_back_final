@@ -6,6 +6,9 @@ import {
   updateVoucher,
   redeemVoucher,
   createBatch,
+  getVouchers,
+  getReportVouchers,
+  importVouchers,
 } from "../controllers/voucher.js";
 import { voucherRateLimiter } from "../middleware/limitReq.js";
 
@@ -21,8 +24,13 @@ export default (router: express.Router) => {
     redeemVoucher
   );
   router.delete("/deleteVoucher/:id", deleteVoucher);
-  router.put("/updateVoucher/:id", updateVoucher);
+  // In your routes file
+  router.put('/vouchers/:id', updateVoucher);
   router.post("/createBatch",createBatch);
+  router.get('/vouchers', getVouchers);
+  router.get('/report-vouchers', getReportVouchers);
+  router.post("/import-vouchers", importVouchers);
+
 
   return router;
 };
