@@ -129,6 +129,7 @@ export const getAllBulk = async (id: number): Promise<Bulk[]> => {
 
   if (error) {
     console.log("error in create Bulk", error);
+    return [];
   } else {
     return data;
   }

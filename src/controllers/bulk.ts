@@ -1,10 +1,14 @@
-import { addBulk, getAllBulk, getVocuherByBulk, removeBulk } from "../db/index.js";
-import express,{ RequestHandler } from "express";
-import { Bulk } from "typs.js";
-
+import {
+  addBulk,
+  getAllBulk,
+  getVocuherByBulk,
+  removeBulk,
+} from "../db/index.js";
+import express, { RequestHandler } from "express";
+import { Bulk } from "../typs.js";
 
 import supabase from "../config/supabaseClient.js";
-import lodash from 'lodash';
+import lodash from "lodash";
 const { get } = lodash;
 
 // Define types for Batch and Voucher
@@ -40,8 +44,16 @@ export const insertBatchAndVouchers = async (
     const { newBatch }: { newBatch: Batch } = req.body; // Extract newBatch from request body
 
     // Validation: check if all necessary fields are present
-    if (!newBatch || !newBatch.serialNumber || !newBatch.voucherCount || !newBatch.distributorId || !newBatch.expiryDate) {
-      res.status(400).json({ message: "Missing required fields for batch and vouchers." });
+    if (
+      !newBatch ||
+      !newBatch.serialNumber ||
+      !newBatch.voucherCount ||
+      !newBatch.distributorId ||
+      !newBatch.expiryDate
+    ) {
+      res
+        .status(400)
+        .json({ message: "Missing required fields for batch and vouchers." });
       return;
     }
 
@@ -64,7 +76,9 @@ export const insertBatchAndVouchers = async (
       .single();
 
     if (batchError) {
-      res.status(500).json({ message: "Error inserting batch", error: batchError.message });
+      res
+        .status(500)
+        .json({ message: "Error inserting batch", error: batchError.message });
       return;
     }
 
@@ -84,7 +98,12 @@ export const insertBatchAndVouchers = async (
     );
 
     if (vouchersError) {
-      res.status(500).json({ message: "Error inserting vouchers", error: vouchersError.message });
+      res
+        .status(500)
+        .json({
+          message: "Error inserting vouchers",
+          error: vouchersError.message,
+        });
       return;
     }
 
@@ -93,9 +112,14 @@ export const insertBatchAndVouchers = async (
       message: "Batch and vouchers inserted successfully",
       batch: batchData,
     });
-  } catch (error : any) {
+  } catch (error: any) {
     console.error("Error inserting batch and vouchers:", error);
-    res.status(500).json({ message: "Failed to insert batch and vouchers", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Failed to insert batch and vouchers",
+        error: error.message,
+      });
   }
 };
 
@@ -104,39 +128,47 @@ export const createBulk = async (
   res: express.Response
 ) => {
   try {
-    const { voucher_count, bulk_value, distributor_id, created_at, expiry_date } = req.body;
+    const {
+      voucher_count,
+      bulk_value,
+      distributor_id,
+      created_at,
+      expiry_date,
+    } = req.body;
 
-
-    if (!bulk_value || !voucher_count || !distributor_id || !created_at || !expiry_date) {
+    if (
+      !bulk_value ||
+      !voucher_count ||
+      !distributor_id ||
+      !created_at ||
+      !expiry_date
+    ) {
       res.status(400).json({ message: "All bulk data fields are required" });
       return;
     }
 
-
     const currentUserId = get(req, "identity.id");
 
-      // Add validation for the user ID
-      if (typeof currentUserId !== 'number') {
-        res.status(403).json({ message: "Unauthorized - Invalid user identity" });
-        return;
-      }
-
+    // Add validation for the user ID
+    if (typeof currentUserId !== "number") {
+      res.status(403).json({ message: "Unauthorized - Invalid user identity" });
+      return;
+    }
 
     const voucherByBulk: any = await addBulk({
       created_by: currentUserId,
       voucher_count,
       created_at,
       expiry_date,
-      total_value: bulk_value, 
+      total_value: bulk_value,
       distributor_id,
     });
-
 
     res.status(200).json({
       message: "Bulk created successfully",
       voucher: voucherByBulk,
     });
-  } catch (error : any) {
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
@@ -146,13 +178,13 @@ export const fetchAllBulk = async (
   res: express.Response
 ) => {
   try {
-   const currentUserId = get(req, "identity.id");
+    const currentUserId = get(req, "identity.id");
 
-// Add validation for the user ID
-if (typeof currentUserId !== 'number') {
-  res.status(403).json({ message: "Unauthorized - Invalid user identity" });
-  return;
-}
+    // Add validation for the user ID
+    if (typeof currentUserId !== "number") {
+      res.status(403).json({ message: "Unauthorized - Invalid user identity" });
+      return;
+    }
     console.log(currentUserId);
     const bulks: Bulk[] = await getAllBulk(currentUserId);
     if (!bulks) {
@@ -160,7 +192,7 @@ if (typeof currentUserId !== 'number') {
       return;
     }
     res.status(200).json({ bulks, message: "fetch all Bulk successfully" });
-  } catch (error : any) {
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
@@ -173,10 +205,10 @@ export const getBatches = async (
 ): Promise<void> => {
   try {
     const { data: batches, error } = await supabase
-      .from('batches')
-      .select('*')
-      .eq('is_deleted', false)
-      .order('created_at', { ascending: false });
+      .from("batches")
+      .select("*")
+      .eq("is_deleted", false)
+      .order("created_at", { ascending: false });
 
     if (error) {
       return next(error);
@@ -187,7 +219,7 @@ export const getBatches = async (
 
     res.status(200).json({
       message: "Batches fetched successfully",
-      batches: batchArray.map(batch => ({
+      batches: batchArray.map((batch) => ({
         id: batch.id,
         serial_number: batch.serial_number,
         status: batch.status,
@@ -197,10 +229,9 @@ export const getBatches = async (
         distributor_id: batch.distributor_id,
         template_id: batch.template_id,
         expiry_date: batch.expiry_date,
-        created_at: batch.created_at
-      }))
+        created_at: batch.created_at,
+      })),
     });
-    
   } catch (error) {
     next(error);
   }
@@ -213,15 +244,18 @@ export const deleteBulk = async (
     const { id } = req.params;
     await removeBulk(Number(id));
     res.status(200).json({ message: "bulk  deleted successfully" });
-  } catch (error : any ) {
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
 
 // controllers/bulk.ts
 
-
-export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => {
+export const updateBatchAndVouchers: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   try {
     const { id } = req.params;
     const { status, value, currency, expiryDate, reason } = req.body;
@@ -234,9 +268,9 @@ export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => 
 
     // Get existing batch
     const { data: batch, error: batchError } = await supabase
-      .from('batches')
-      .select('*')
-      .eq('id', id)
+      .from("batches")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (batchError || !batch) {
@@ -246,15 +280,15 @@ export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => 
 
     // Update batch
     const { error: updateBatchError } = await supabase
-      .from('batches')
+      .from("batches")
       .update({
         status,
         total_value: value * batch.voucher_count,
         currency,
         expiry_date: expiryDate,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
-      .eq('id', id);
+      .eq("id", id);
 
     if (updateBatchError) {
       throw updateBatchError;
@@ -262,14 +296,14 @@ export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => 
 
     // Update vouchers
     const { error: voucherError } = await supabase
-      .from('vouchers')
+      .from("vouchers")
       .update({
         status,
         value,
         currency,
-        expiry_date: expiryDate
+        expiry_date: expiryDate,
       })
-      .eq('batch_id', id);
+      .eq("batch_id", id);
 
     if (voucherError) {
       throw voucherError;
@@ -277,17 +311,16 @@ export const updateBatchAndVouchers: RequestHandler = async (req, res, next) => 
 
     // Return updated batch
     const { data: updatedBatch } = await supabase
-      .from('batches')
-      .select('*')
-      .eq('id', id)
+      .from("batches")
+      .select("*")
+      .eq("id", id)
       .single();
 
     // Send response without returning it
     res.status(200).json({
       message: "Batch and vouchers updated successfully",
-      batch: updatedBatch
+      batch: updatedBatch,
     });
-
   } catch (error) {
     next(error); // Pass error to Express error handler
   }

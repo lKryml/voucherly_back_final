@@ -171,7 +171,7 @@ export const login = async (req: express.Request, res: express.Response) => {
       return;
     }
 
-    otpUsers[P_phoneNumber] = await getOTP(P_phoneNumber);
+    otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
     const salt = random();
 
     res.status(200).json({ user });

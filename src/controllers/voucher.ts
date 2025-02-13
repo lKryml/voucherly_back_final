@@ -17,7 +17,7 @@ import express from "express";
 import lodash from "lodash";
 const { get } = lodash;
 import { Bulk, Voucher } from "../typs.js";
-import supabase from "../config/supabaseClient";
+import supabase from "../config/supabaseClient.js";
 import { Request, Response, NextFunction } from 'express';
 // export const createVouchers = async (
 //   req: express.Request,
@@ -93,7 +93,7 @@ export const importVouchers = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ message: "Batches and vouchers imported successfully" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error importing batches:", error);
     res.status(500).json({ message: "Failed to import vouchers", error: error.message });
   }
@@ -142,7 +142,7 @@ export const updateVoucher1 = async (
   try {
     const { id } = req.params;
     const {} = req.body;
-    await updateVoucherData(Number(id), null);
+    await updateVoucherData(Number(id), {});
     res.status(200).json({ message: "voucher updated successfully" });
   } catch (error :any) {
     res.status(500).json({ message: error.message });
