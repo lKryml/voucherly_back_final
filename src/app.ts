@@ -3,15 +3,14 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
-import {initializeOTPService} from "./routes/otpGenerator.js"
+import { initializeOTPService } from "./routes/otpGenerator.js";
 import router from "./routes/index.js";
-
 
 const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: "https://vouchermanagement.rento.ly",
     credentials: true,
   })
 );
@@ -19,10 +18,9 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
 });
-
 
 (async () => {
   try {
@@ -34,6 +32,5 @@ app.get('/health', (req, res) => {
   }
 })();
 app.use("/api", router());
-
 
 export default app;

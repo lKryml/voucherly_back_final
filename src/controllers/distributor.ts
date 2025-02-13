@@ -83,7 +83,6 @@ export const fetchAllDistrbutor = async (
       res.status(403).json({ message: "Unauthorized - Invalid user identity" });
       return;
     }
-
     const distributors: Distributor[] = await getAllDistributor(currentUserId);
     console.log(distributors);
 

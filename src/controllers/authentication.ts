@@ -46,10 +46,10 @@ export const generateAndSaveSessionToken = async (
 
   // Set the session token as a cookie
   res.cookie("VOUCHER-AUTH", session_token, {
-    domain: "localhost", // Change if needed
+    domain: ".rento.ly", // Change if needed
     path: "/",
     httpOnly: true, // Recommended for security
-    secure: false, // Set to true if using HTTPS
+    secure: true, // Set to true if using HTTPS
     sameSite: "lax", // Allows cross-site requests while preventing CSRF
     maxAge: 60 * 60 * 24 * 1000, // 1 day
   });

@@ -179,13 +179,10 @@ export const fetchAllBulk = async (
 ) => {
   try {
     const currentUserId = get(req, "identity.id");
-
-    // Add validation for the user ID
     if (typeof currentUserId !== "number") {
       res.status(403).json({ message: "Unauthorized - Invalid user identity" });
       return;
     }
-    console.log(currentUserId);
     const bulks: Bulk[] = await getAllBulk(currentUserId);
     if (!bulks) {
       res.status(400).json({ message: "error in fetch distributors" });
