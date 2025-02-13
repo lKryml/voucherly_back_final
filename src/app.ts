@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://vouchermanagement.rento.ly",
+    origin: ["https://topup.rento.ly", "https://vouchermanagement.rento.ly"],
     credentials: true,
   })
 );
