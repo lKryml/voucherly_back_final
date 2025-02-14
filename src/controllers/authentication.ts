@@ -181,7 +181,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     res.status(200).json({ user });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message + "gogogo" });
   }
 };
 
