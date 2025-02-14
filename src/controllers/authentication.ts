@@ -66,9 +66,13 @@ export const verifySessionToken = async (
   req: express.Request,
   res: express.Response
 ) => {
+  //!test cookies
   try {
-    const { session_token } = req.body;
+    if (!req.cookies?.session_token) {
+      return res.status(401).json({ message: "No session token" });
+    }
 
+    const session_token = req.cookies.session_token;
     if (!session_token) {
       res.status(400).json({ message: "Session token is required" });
       return;
@@ -208,7 +212,7 @@ export const sendOTP = async (req: express.Request, res: express.Response) => {
     res.status(200).json({ message: "OTP verified successfully" });
     return;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
     return;
   }
 };
