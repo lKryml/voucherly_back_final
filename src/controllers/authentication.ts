@@ -71,6 +71,7 @@ export const verifySessionToken = async (
 
     if (!req.cookies?.session_token) {
       res.status(401).json({ message: "No session token" });
+      return;
     }
 
     const session_token = req.cookies.session_token;
@@ -89,6 +90,7 @@ export const verifySessionToken = async (
     res.status(200).json({ message: "Session token is valid", user });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    return;
   }
 };
 export const register = async (req: express.Request, res: express.Response) => {
@@ -181,7 +183,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     res.status(200).json({ user });
   } catch (error: any) {
-    res.status(500).json({ message: error.message + "gogogo" });
+    res.status(500).json({ message: error.message });
   }
 };
 
