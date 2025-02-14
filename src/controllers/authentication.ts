@@ -67,13 +67,6 @@ export const verifySessionToken = async (
   res: express.Response
 ) => {
   try {
-    //!test cookies
-
-    if (!req.cookies?.session_token) {
-      res.status(401).json({ message: "No session token" });
-      return;
-    }
-
     const session_token = req.cookies.session_token;
     if (!session_token) {
       res.status(400).json({ message: "Session token is required" });
