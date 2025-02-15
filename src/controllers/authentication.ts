@@ -45,7 +45,7 @@ export const generateAndSaveSessionToken = async (
   console.log("Generated session token:", session_token);
 
   // Set the session token as a cookie
-  res.cookie("VOUCHER-AUTH", session_token, {
+  res.cookie("voucherA", session_token, {
     domain: ".rento.ly", // Change if needed
     path: "/",
     httpOnly: true, // Recommended for security
@@ -67,7 +67,7 @@ export const verifySessionToken = async (
   res: express.Response
 ) => {
   try {
-    const session_token = req.cookies.session_token;
+    const session_token = req.cookies["voucherA"];
     if (!session_token) {
       res.status(400).json({ message: "Session token is required" });
       return;

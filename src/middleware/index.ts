@@ -1,21 +1,20 @@
 import { findByKey, getUserBySessionToken } from "../db/index.js";
 import express from "express";
 
-import lodash from 'lodash';
+import lodash from "lodash";
 const { merge } = lodash;
 
 export const isAuthenticated = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-  
 ) => {
   try {
     console.log("hi");
-    
-    const sessionToken = req.cookies["VOUCHER-AUTH"];
+
+    const sessionToken = req.cookies["voucherA"];
     console.log(sessionToken);
-    
+
     if (!sessionToken) {
       res.status(403).json({ message: "sessionToken is expiry" });
       return;
@@ -23,7 +22,7 @@ export const isAuthenticated = async (
 
     const existingUser = await getUserBySessionToken(sessionToken);
     console.log(existingUser);
-    
+
     if (!existingUser) {
       res.status(403).json({ message: "user not found" });
       return;
@@ -32,7 +31,7 @@ export const isAuthenticated = async (
     req = merge(req, { identity: existingUser });
 
     next();
-  } catch (error : any) {
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
