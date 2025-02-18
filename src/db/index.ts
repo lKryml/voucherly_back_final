@@ -478,3 +478,22 @@ export const createBatchVoucher = async (data: any) => {
     throw new Error(error.message);
   } else return batchData;
 };
+
+
+export const revertVoucherStatus = async (voucherCode: string) => {
+  try {
+    const { error } = await supabase
+      .from('vouchers')
+      .update({ status: 'valid' }) // Or your initial valid status
+      .eq('redemption_code', voucherCode);
+
+    if (error) {
+      console.error("Error reverting voucher status:", error);
+      throw error; // Re-throw for error handling in the controller
+    }
+
+  } catch (error) {
+    console.error("Error in revertVoucherStatus:", error);
+    throw error;
+  }
+};
