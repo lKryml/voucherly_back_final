@@ -10,6 +10,7 @@ import {
   getVoucherByCode,
   isValid,
   removeVoucher,
+  revertVoucherStatus,
   updateStatus,
   updateVoucherData,
 } from "../db/index.js";
@@ -512,5 +513,89 @@ export const getReportVouchers = async (
 
   } catch (error) {
     next(error);
+  }
+};
+
+export const reserveVoucher = async (req: Request, res: Response) => {
+  const { voucherCode } = req.params;
+
+  console.log("Reserving voucher:", voucherCode);
+  try {
+    const voucherResult = await getVoucherByCode(voucherCode);
+    const voucher: any | null = voucherResult ? voucherResult[0] : null;
+
+    if (!voucher) {
+      res.status(404).json({ message: "Voucher not found." });
+      return;
+    }
+
+    if (voucher.status === "redeemed") {
+      res.status(400).json({ message: "Voucher has already been redeemed." });
+      return;
+    }
+
+    if (voucher.status === "suspended") {
+      res.status(400).json({ message: "Voucher is already being processed." });
+      return;
+    }
+
+    if (new Date(voucher.expiry_date) < new Date()) {
+      res.status(400).json({ message: "Voucher has expired." });
+      return;
+    }
+
+    await updateVoucherData(voucher.id, { status: "suspended" });
+
+    res.status(200).json({
+      message: "Voucher reserved successfully",
+      voucher: {
+        code: voucher.redemption_code,
+        amount: voucher.value,
+        currency: voucher.currency,
+        expiryDate: voucher.expiry_date,
+      },
+    });
+  } catch (error: any) {
+    console.error("Error reserving voucher:", error);
+    res.status(500).json({ message: "An error occurred while reserving the voucher.", error: error.message });
+  }
+};
+
+export const completeVoucherRedemption = async (req: Request, res: Response) => {
+  const { voucherCode } = req.params;
+
+  try {
+    const voucherResult = await getVoucherByCode(voucherCode);
+    const voucher: any | null = voucherResult ? voucherResult[0] : null;
+
+    if (!voucher) {
+      res.status(404).json({ message: "Voucher not found." });
+      return;
+    }
+
+    if (voucher.status !== "suspended") {
+      res.status(400).json({ message: "Voucher is not in the suspended state." });
+      return;
+    }
+
+    await updateVoucherData(voucher.id, { status: "redeemed" });
+
+    res.status(200).json({ message: "Voucher redemption completed." });
+  } catch (error: any) {
+    console.error("Error completing voucher redemption:", error);
+    res.status(500).json({ message: "An error occurred while completing voucher redemption.", error: error.message });
+  }
+};
+
+export const revertVoucher = async (req: Request, res: Response) => {
+  const { voucherCode } = req.params;
+
+  try {
+    await revertVoucherStatus(voucherCode);
+    res.status(200).json({ message: "Voucher status reverted successfully." });
+  } catch (error) {
+    console.error("Error reverting voucher:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({ message: "Failed to revert voucher status.", error: errorMessage });
   }
 };

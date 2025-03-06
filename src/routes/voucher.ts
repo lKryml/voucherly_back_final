@@ -9,6 +9,9 @@ import {
   getVouchers,
   getReportVouchers,
   importVouchers,
+  reserveVoucher,
+  completeVoucherRedemption,
+  revertVoucher,
 } from "../controllers/voucher.js";
 import { voucherRateLimiter } from "../middleware/limitReq.js";
 
@@ -30,6 +33,9 @@ export default (router: express.Router) => {
   router.get('/vouchers', getVouchers);
   router.get('/report-vouchers', getReportVouchers);
   router.post("/import-vouchers", importVouchers);
+  router.get("/api/reserve-voucher/:voucherCode", voucherRateLimiter, reserveVoucher);
+  router.put("/api/complete-voucher-redemption/:voucherCode", completeVoucherRedemption);
+  router.put("/api/revert-voucher/:voucherCode", revertVoucher);
 
 
   return router;
