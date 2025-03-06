@@ -17,7 +17,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["https://topup.rento.ly", "https://vouchermanagement.rento.ly"],
+    origin: ["https://adexwallet.com", "https://vouchermanagement.rento.ly"],
     credentials: true,
   })
 );
