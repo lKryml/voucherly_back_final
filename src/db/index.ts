@@ -482,14 +482,31 @@ export const createBatchVoucher = async (data: any) => {
 
 export const revertVoucherStatus = async (voucherCode: string) => {
   try {
-    const { error } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('vouchers')
-      .update({ status: 'valid' }) // Or your initial valid status
+      .select('status')
+      .eq('redemption_code', voucherCode)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching voucher status:", fetchError);
+      throw fetchError;
+    }
+
+    if (!data || data.status !== 'suspended') {
+      console.log("Voucher is not in a revertible state.");
+      return; 
+    }
+
+
+    const { error: updateError } = await supabase
+      .from('vouchers')
+      .update({ status: 'valid' })
       .eq('redemption_code', voucherCode);
 
-    if (error) {
-      console.error("Error reverting voucher status:", error);
-      throw error; // Re-throw for error handling in the controller
+    if (updateError) {
+      console.error("Error reverting voucher status:", updateError);
+      throw updateError;
     }
 
   } catch (error) {
