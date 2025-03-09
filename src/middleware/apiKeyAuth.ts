@@ -6,7 +6,7 @@ export const apiKeyAuth = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const apiKey = req.headers['api-key'];
+  const apiKey = req.headers.authorization;
 
   if (!apiKey) {
     res.status(401).json({ error: 'API key required' });
