@@ -13,7 +13,7 @@ export const apiKeyAuth = (
     return;
   }
 
-  if (apiKey !== process.env.SHARED_API_KEY) {
+  if (apiKey !== process.env.EXTERNAL_API_KEY) {
     res.status(403).json({ error: 'Invalid API key' });
     return;
   }
