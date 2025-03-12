@@ -10,8 +10,8 @@ import {
 
 export default (router: express.Router) => {
   router.post("/template", isAuthenticated, createTemplate);
-  router.delete("/template/:id", deleteTemplate);
-  router.put("/template/:id", updateTemplate);
+  router.delete("/template/:id", isAuthenticated,deleteTemplate);
+  router.put("/template/:id", isAuthenticated,updateTemplate);
   router.get("/template", isAuthenticated, fetchAllTemplate);
   router.get("/allTemplateByName", isAuthenticated, fetchAllTemplateByName);
 };

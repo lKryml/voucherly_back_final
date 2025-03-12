@@ -10,8 +10,8 @@ import express from "express";
 
 export default (router: express.Router) => {
   router.post("/distributor", isAuthenticated, createDistributor);
-  router.delete("/distributor/:id", deleteDistributor);
-  router.put("/distributor/:id", updateDistributor);
+  router.delete("/distributor/:id", isAuthenticated,deleteDistributor);
+  router.put("/distributor/:id", isAuthenticated,updateDistributor);
   router.get("/distributor", isAuthenticated, fetchAllDistrbutor);
   router.get("/distributorByName", isAuthenticated, orderDistrbutorsByName);
 };
