@@ -27,7 +27,7 @@ function generateCode(): string {
 }
 
 async function fetchTemplate(): Promise<any> {
-  let templatesURL = `https://graph.facebook.com/v16.0/${wabaID}/message_templates?access_token=${accessToken}`;
+  let templatesURL = `https://graph.facebook.com/v23.0/${wabaID}/message_templates?access_token=${accessToken}`;
   let template = null;
 
   do {
@@ -95,7 +95,7 @@ export async function initializeOTPService(app: express.Application) {
       expirationTimestamp.getMinutes() + codeLifetimeInMinutes
     );
 
-    const sendMessageURL = `https://graph.facebook.com/v16.0/${phoneNumberID}/messages`;
+    const sendMessageURL = `https://graph.facebook.com/v23.0/${phoneNumberID}/messages`;
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
