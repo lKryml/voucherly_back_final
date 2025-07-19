@@ -8,10 +8,10 @@ dotenv.config();
 const codeLength = 6;
 const codeLifetimeInMinutes = 5;
 
-const wabaID = "529181543612845";
+const wabaID = "1224610756132974";
 const accessToken =
   "EAAL0eSXLI1wBPBtMqqSQqUt1SaBg9bzTLuNHmZBl0JuwsxcnK4nJZC9EX4j4ALDUoZAviBt38C1RcZAcZB9aZBU6wlYgner3QgNZCDB9DosLZAkM8O1H3LYT3jZBkHre4H0tlnJ38F3wH3VUEIgwLLd5ImPZCfKaqBiNLCVfLeCBZBJ0XXq509YcqN4icR8VdwtZAZCCoNoexATFd6OO1wTzaGGnsyfKHbUwl7eZBZCaCzi81K1XHupIAZDZD"
-const phoneNumberID = "537236529472818";
+const phoneNumberID = "744542112069323";
 const templateID = "1789381825233357";
 
 interface ActiveCode {
