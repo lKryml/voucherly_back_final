@@ -30,29 +30,29 @@ function generateCode(): string {
 
 async function fetchTemplate(): Promise<any> {
   let templatesURL = `https://graph.facebook.com/v23.0/${wabaID}/message_templates?access_token=${accessToken}`;
-  let template = null;
+  let template = '617946080902173';
 
-  do {
-    try {
-      const templatesResponse = await axios.get(templatesURL);
-      templatesResponse.data?.data?.forEach((element: any) => {
-        if (element.id === templateID) {
-          template = element;
-        }
-      });
+  // do {
+  //   try {
+  //     const templatesResponse = await axios.get(templatesURL);
+  //     templatesResponse.data?.data?.forEach((element: any) => {
+  //       if (element.id === templateID) {
+  //         template = element;
+  //       }
+  //     });
 
-      templatesURL = templatesResponse?.data?.paging?.next || null;
-    } catch (error: any) {
-      console.error(`Error fetching templates: ${error.message}`);
-      throw error;
-    }
-  } while (!template && templatesURL);
+  //     templatesURL = templatesResponse?.data?.paging?.next || null;
+  //   } catch (error: any) {
+  //     console.error(`Error fetching templates: ${error.message}`);
+  //     throw error;
+  //   }
+  // } while (!template && templatesURL);
 
   return template;
 }
 
 export async function initializeOTPService(app: express.Application) {
-  // const template = await fetchTemplate();
+  const template = await fetchTemplate();
 
   // if (!template) {
   //   console.log(
@@ -97,49 +97,49 @@ export async function initializeOTPService(app: express.Application) {
       expirationTimestamp.getMinutes() + codeLifetimeInMinutes
     );
 
-    const sendMessageURL = `https://graph.facebook.com/v23.0/${phoneNumberID}/messages`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    const payload = {
-      messaging_product: "whatsapp",
-      recipient_type: "individual",
-      to: phone,
-      type: "template",
-      template: {
-        name: templateName,
-        language: {
-          code: "en_US",
-        },
-        components: [
-          {
-            type: "body",
-            parameters: [
-              {
-                type: "text",
-                text: code,
-              },
-            ],
-          },
-          {
-            type: "button",
-            sub_type: "url",
-            index: "0",
-            parameters: [
-              {
-                type: "text",
-                text: code,
-              },
-            ],
-          },
-        ],
-      },
-    };
+    // const sendMessageURL = `https://graph.facebook.com/v23.0/${phoneNumberID}/messages`;
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // };
+    // const payload = {
+    //   messaging_product: "whatsapp",
+    //   recipient_type: "individual",
+    //   to: phone,
+    //   type: "template",
+    //   template: {
+    //     name: templateName,
+    //     language: {
+    //       code: "en_US",
+    //     },
+    //     components: [
+    //       {
+    //         type: "body",
+    //         parameters: [
+    //           {
+    //             type: "text",
+    //             text: code,
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         type: "button",
+    //         sub_type: "url",
+    //         index: "0",
+    //         parameters: [
+    //           {
+    //             type: "text",
+    //             text: code,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // };
 
     try {
-      await axios.post(sendMessageURL, payload, config);
+      // await axios.post(sendMessageURL, payload, config);
       activeCodes[phone] = { code, expirationTimestamp };
       res.send();
     } catch (error: any) {
