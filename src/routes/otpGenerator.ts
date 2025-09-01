@@ -52,24 +52,24 @@ async function fetchTemplate(): Promise<any> {
 }
 
 export async function initializeOTPService(app: express.Application) {
-  const template = await fetchTemplate();
+  // const template = await fetchTemplate();
 
-  if (!template) {
-    console.log(
-      `Could not find template with ID ${templateID} for WABA ${wabaID}.`
-    );
-    process.exit(1);
-  } else if (template?.status !== "APPROVED") {
-    console.log(
-      `Please wait until the template with ID ${templateID} is approved before running this script.`
-    );
-    process.exit(1);
-  }
+  // if (!template) {
+  //   console.log(
+  //     `Could not find template with ID ${templateID} for WABA ${wabaID}.`
+  //   );
+  //   process.exit(1);
+  // } else if (template?.status !== "APPROVED") {
+  //   console.log(
+  //     `Please wait until the template with ID ${templateID} is approved before running this script.`
+  //   );
+  //   process.exit(1);
+  // }
 
-  const templateName = template?.name;
-  console.log(
-    `Verified OTP template '${templateName}' with ID ${templateID} is approved and ready to send.`
-  );
+  // const templateName = template?.name;
+  // console.log(
+  //   `Verified OTP template '${templateName}' with ID ${templateID} is approved and ready to send.`
+  // );
 
   // Middleware
   app.use(bodyParser.json());
