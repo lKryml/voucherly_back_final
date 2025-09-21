@@ -17,7 +17,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["https://adexwallet.com", "https://vouchermanagement.rento.ly"],
+    origin: ["https://adexwallet.com", "https://vouchermanagement.rento.ly","http://localhost:5173"],
     credentials: true,
   })
 );

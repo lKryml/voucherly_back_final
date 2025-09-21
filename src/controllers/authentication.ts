@@ -46,7 +46,7 @@ export const generateAndSaveSessionToken = async (
 
   // Set the session token as a cookie
   res.cookie("voucherA", session_token, {
-    domain: ".rento.ly", // Change if needed
+
     path: "/",
     httpOnly: true, // Recommended for security
     secure: true, // Set to true if using HTTPS
@@ -171,7 +171,7 @@ export const login = async (req: express.Request, res: express.Response) => {
       return;
     }
 
-    otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
+    // otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
     const salt = random();
 
     res.status(200).json({ user });

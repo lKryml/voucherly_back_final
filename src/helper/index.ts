@@ -1,6 +1,6 @@
 import crypto from "crypto";
-
-import twilio from "twilio";
+//todo remove this 
+// import twilio from "twilio";
 import dotenv from "dotenv";
 import otpGenerator from "otp-generator";
 dotenv.config();
@@ -17,20 +17,20 @@ export const authentication = (salt: string, password: string) => {
 };
 
 export const getOTP = async (P_phoneNumber: string) => {
-  const client = twilio(process.env.accountSid, process.env.authToken);
-  const otp = otpGenerator.generate(6, {
-    digits: true,
-    lowerCaseAlphabets: false,
-    upperCaseAlphabets: false,
-    specialChars: false,
-  });
+//   const client = twilio(process.env.accountSid, process.env.authToken);
+//   const otp = otpGenerator.generate(6, {
+//     digits: true,
+//     lowerCaseAlphabets: false,
+//     upperCaseAlphabets: false,
+//     specialChars: false,
+//   });
   try {
-    await client.messages.create({
-      body: `🔐 Your OTP is: *${otp}*\n\nCopy the OTP and paste it into the app to verify your number.`,
-      from: "whatsapp:+14155238886",
-      to: `whatsapp:+${P_phoneNumber}`,
-    });
-    return otp.trim();
+    // await client.messages.create({
+    //   body: `🔐 Your OTP is: *${otp}*\n\nCopy the OTP and paste it into the app to verify your number.`,
+    //   from: "whatsapp:+14155238886",
+    //   to: `whatsapp:+${P_phoneNumber}`,
+    // });
+    // return otp.trim();
   } catch (error: any) {
     console.log(error.message);
   }

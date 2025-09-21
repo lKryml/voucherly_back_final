@@ -8,8 +8,8 @@ POST http://localhost:3030/api/auth/login
 Content-Type: application/json
 
 {
-  "P_phoneNumber": "218927345059",
-  "p_password": "mostafa"
+  "P_phoneNumber": "218945877949",
+  "p_password": "12345678"
 }
 
 ### Verify the session token
@@ -33,7 +33,7 @@ POST http://localhost:3030/otp/218945877949
 Content-Type: application/json
 
 {
-  "code": "309597"
+  "code": "115511"
 }
 
 ### Example with a real phone number and code
