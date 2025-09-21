@@ -4,8 +4,8 @@ dotenv.config();
 
 // const supabaseUrl = process.env.SUPABASE_URL;
 // const supabaseKey = process.env.SUPABASE_KEY;
-const supabaseUrl="https://ffrojznohbadlkzeekrz.supabase.co"
-const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmcm9qem5vaGJhZGxremVla3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcxMDAwNjUsImV4cCI6MjA1MjY3NjA2NX0.DDHVF5DnlKa9FkKLc6jR4cAVzPT4_lM9XNLzuHNxtM4"
+const supabaseUrl=process.env.SUPABASE_URL
+const supabaseKey=process.env.SUPABASE_KEY
 
 console.log(supabaseKey);
 if (!supabaseUrl || !supabaseKey) {
