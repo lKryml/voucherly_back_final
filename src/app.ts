@@ -11,24 +11,27 @@ import rateLimit from "express-rate-limit";
 const app = express();
 app.set("trust proxy", 1); // Trust first proxy
 
-// CORS must be applied before other middleware
-app.use(
-  cors({
-    origin: [
-      "https://vms.ofuq.ly.com",
-      "http://vms.ofuq.ly.com",
-      "http://vms.dashboard.ofuq.ly",
-      "https://vms.dashboard.ofuq.ly",
-      "http://app.ofuq.ly",
-      "https://app.ofuq.ly",
-      "http://ofuq.ly",
-      "https://ofuq.ly"
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-  })
-);
+// CORS - allow all origins for testing
+app.use(cors());
+
+// OLD CORS CONFIG - commented out for testing
+// app.use(
+//   cors({
+//     origin: [
+//       "https://vms.ofuq.ly.com",
+//       "http://vms.ofuq.ly.com",
+//       "http://vms.dashboard.ofuq.ly",
+//       "https://vms.dashboard.ofuq.ly",
+//       "http://app.ofuq.ly",
+//       "https://app.ofuq.ly",
+//       "http://ofuq.ly",
+//       "https://ofuq.ly"
+//     ],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+//   })
+// );
 
 app.use(express.json({ limit: "10kb" }));
 app.use(helmet());
