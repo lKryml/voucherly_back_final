@@ -17,7 +17,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["https://vms.ofuq.ly.com","http://vms.ofuq.ly.com"],
+    origin: ["https://vms.ofuq.ly.com","http://vms.ofuq.ly.com","http://vms.dashboard.ofuq.ly","https://vms.dashboard.ofuq.ly"],
     credentials: true,
   })
 );
