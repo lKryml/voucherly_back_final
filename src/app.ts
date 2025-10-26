@@ -11,6 +11,22 @@ import rateLimit from "express-rate-limit";
 const app = express();
 app.set("trust proxy", 1); // Trust first proxy
 
+// Manual CORS headers - needed for Coolify/Traefik proxy
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie, X-Requested-With");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Max-Age", "86400"); // 24 hours
+  
+  // Handle preflight
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
+  next();
+});
+
 // CORS - allow all origins for testing
 app.use(cors());
 
