@@ -301,7 +301,7 @@ export const createBatch = async (
       include_numbers: includeNumbers,
       include_letters: includeLetters,
       created_by: 456,
-      serial_prefix: "ADEX",
+      serial_prefix: "OFUQ", // prod shit
     });
     res.status(200).send(data);
   } catch (error : any) {
