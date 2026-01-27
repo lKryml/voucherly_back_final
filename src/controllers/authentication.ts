@@ -153,30 +153,34 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     if (!P_phoneNumber || !p_password) {
       res.status(400).json({
-        message: `${p_password ? "password " : ""} ${
-          p_password && P_phoneNumber ? "& " : ""
-        }${P_phoneNumber ? "username" : ""}  require`,
+        message: "Phone number and password are required",
       });
       return;
     }
 
+    // Validate credentials using Supabase RPC
     await supabaseLogin(P_phoneNumber, p_password);
+    
     const user: any = await getUserByNumber(P_phoneNumber);
     console.log(user);
 
     if (!user) {
-      res.status(400).json({
-        message: "user not found",
+      res.status(401).json({
+        message: "Invalid phone number or password",
       });
       return;
     }
 
-    // otpUsers[P_phoneNumber] = (await getOTP(P_phoneNumber)) || "";
-    const salt = random();
-
     res.status(200).json({ user });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error("Login error:", error);
+    
+    // Handle specific error messages
+    if (error.message.includes("Invalid phone number or password")) {
+      res.status(401).json({ message: "Invalid phone number or password" });
+    } else {
+      res.status(500).json({ message: "An error occurred during login. Please try again." });
+    }
   }
 };
 

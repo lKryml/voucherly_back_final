@@ -76,12 +76,18 @@ export const supabaseLogin = async (phone: string, password: string) => {
     p_phone_number: phone,
   });
 
-  if (data.length == 0 || error) {
-    console.log("error in create login", error);
-    throw new Error("error in create login");
-  } else {
-    console.log("login successfully:", data);
+  if (error) {
+    console.log("error in login", error);
+    throw new Error("Database error during login");
   }
+  
+  if (!data || data.length === 0) {
+    console.log("Invalid credentials for phone:", phone);
+    throw new Error("Invalid phone number or password");
+  }
+  
+  console.log("login successfully:", data);
+  return data;
 };
 export const frogetPassword = async (passowrd: string, id: number) => {
   let { data, error } = await supabase.rpc("change_user_password", {
