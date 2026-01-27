@@ -17,7 +17,16 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["https://vms.ofuq.ly.com","http://vms.ofuq.ly.com","http://vms.dashboard.ofuq.ly","https://vms.dashboard.ofuq.ly","vms.dashboard.ofuq.ly","http://app.ofuq.ly","http://ofuq.ly"],
+    origin: [
+      "https://vms.ofuq.ly",
+      "http://vms.ofuq.ly",
+      "https://vms.dashboard.ofuq.ly",
+      "http://vms.dashboard.ofuq.ly",
+      "https://app.ofuq.ly",
+      "http://app.ofuq.ly",
+      "https://ofuq.ly",
+      "http://ofuq.ly",
+    ],
     credentials: true,
   })
 );
@@ -31,7 +40,7 @@ app.get("/health", (req, res) => {
 
 const authLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 5,
+  max: 30,
   message: "Too many requests from this IP, please try again later",
   validate: { trustProxy: true },
 });
