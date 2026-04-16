@@ -188,7 +188,10 @@ export const redeemVoucher = async (
       res.status(400).json({ message: "Voucher has expired." });
       return;
     }
-    await updateVoucherData(voucher.id, { status: "redeemed" });
+    await updateVoucherData(voucher.id, { 
+      status: "redeemed",
+      redemption_date: new Date().toISOString()
+    });
 
     res.status(200).json({
       message: "Voucher is valid.",
@@ -301,7 +304,7 @@ export const createBatch = async (
       include_numbers: includeNumbers,
       include_letters: includeLetters,
       created_by: 456,
-      serial_prefix: "OFUQ", // prod shit
+      serial_prefix: "ADEX",
     });
     res.status(200).send(data);
   } catch (error : any) {
@@ -325,7 +328,7 @@ export const getVouchers = async (
       while (hasMore) {
         const { data: chunk, error } = await supabase
           .from('vouchers')
-          .select('*, batches!inner(is_deleted)')
+          .select('*, redemption_date, batches!inner(is_deleted)')
           .eq('is_deleted', false)
           .eq('batches.is_deleted', false)
           .range(from, from + chunkSize - 1);
@@ -354,7 +357,8 @@ export const getVouchers = async (
         distributor_id: v.distributor_id,
         template_id: v.template_id,
         batch_id: v.batch_id,
-        expiry_date: v.expiry_date
+        expiry_date: v.expiry_date,
+        redemption_date: v.redemption_date
       }))
     });
 
@@ -395,13 +399,18 @@ export const updateVoucher = async (
     if (rpcError) throw rpcError;
 
     // Prepare updates
-    const dbUpdates = {
+    const dbUpdates: any = {
       status: updates.status,
       value: updates.value,
       currency: updates.currency,
       expiry_date: updates.expiryDate,
       updated_at: new Date().toISOString()
     };
+
+    // Set redemption_date when status changes to redeemed
+    if (updates.status === 'redeemed') {
+      dbUpdates.redemption_date = new Date().toISOString();
+    }
 
     // Update voucher
     const { data: voucher, error: updateError } = await supabase
@@ -578,7 +587,10 @@ export const completeVoucherRedemption = async (req: Request, res: Response) => 
       return;
     }
 
-    await updateVoucherData(voucher.id, { status: "redeemed" });
+    await updateVoucherData(voucher.id, { 
+      status: "redeemed",
+      redemption_date: new Date().toISOString()
+    });
 
     res.status(200).json({ message: "Voucher redemption completed." });
   } catch (error: any) {
